@@ -1,3 +1,7 @@
-"use strict";
+import React from "react";
+import PlaygroundApp from "./Containers/PlaygroundApp";
 
-// Your application code here!
+React.render(
+  <PlaygroundApp />,
+  document.getElementById('root')
+);
