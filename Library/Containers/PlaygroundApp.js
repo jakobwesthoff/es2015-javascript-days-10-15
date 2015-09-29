@@ -23,6 +23,16 @@ export default class PlaygroundApp extends Component {
         }
     }
 
+    constructor() {
+        super();
+        if ("localStorage" in window && window["localStorage"] !== null) {
+            let savedState = window.localStorage.getItem("savedES6Code");
+            if (savedState !== null && savedState !== undefined) {
+                this.state.es6value = savedState;
+            }
+        }
+    }
+
     render() {
         const {es6value, jsvalue, viewportHeight, viewportWidth,
                es6options, jsoptions} = this.state;
@@ -62,6 +72,7 @@ export default class PlaygroundApp extends Component {
         });
 
         this.transpile(newValue);
+        this.saveState(newValue);
     }
 
     onJSChange = (newValue) => {
@@ -90,6 +101,7 @@ export default class PlaygroundApp extends Component {
     componentDidMount() {
         this.onResizeViewport();
         window.addEventListener('resize', this.onResizeViewport);
+        this.onES6Change(this.state.es6value);
     }
 
     componentWillUnmount() {
@@ -115,4 +127,10 @@ export default class PlaygroundApp extends Component {
             });
         }
     }, 250);
+
+    saveState = _.debounce((value) => {
+        if ("localStorage" in window && window["localStorage"] !== null) {
+            window.localStorage.setItem("savedES6Code", value);
+        }
+    }, 500);
 }
